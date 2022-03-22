@@ -1,0 +1,15 @@
+#!/bin/bash
+
+mkdir -p /home/ubuntu/n8n/appdata
+
+wget -O /home/ubuntu/n8n/docker-compose.yml https://raw.githubusercontent.com/n8n-io/n8n-benchmarking/master/n8n/queue/docker-compose.yml
+wget -O /home/ubuntu/n8n/init-data.sh https://raw.githubusercontent.com/n8n-io/n8n-benchmarking/master/n8n/queue/init-data.sh
+
+echo "N8N_VERSION=${n8nVersion}" >> /home/ubuntu/n8n/.env
+echo "DB_POSTGRESDB_HOST=${postgresHost}" >> /home/ubuntu/n8n/.env
+echo "QUEUE_BULL_REDIS_HOST=${redisHost}" >> /home/ubuntu/n8n/.env
+
+sleep 1
+
+
+sudo docker-compose -f /home/ubuntu/n8n/docker-compose.yml up -d
