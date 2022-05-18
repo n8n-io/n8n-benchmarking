@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ulimit -n 1048576 # open files
+
 url_postfix="/healthz"
 
 for worker_health_uri in "$@"

@@ -1,12 +1,6 @@
 #!/bin/bash
 
-mkdir -p /home/ubuntu/n8n/appdata
-mkdir -p /home/ubuntu/n8n/appdata/workflows
-
-wget -O /home/ubuntu/n8n/docker-compose.yml https://raw.githubusercontent.com/n8n-io/n8n-benchmarking/master/n8n/regular/docker-compose.yml
-
-wget -O /home/ubuntu/n8n/appdata/workflows/workflow-1.json https://raw.githubusercontent.com/n8n-io/n8n-benchmarking/master/n8n/workflows/workflow-1.json
-wget -O /home/ubuntu/n8n/appdata/workflows/workflow-2.json https://raw.githubusercontent.com/n8n-io/n8n-benchmarking/master/n8n/workflows/workflow-2.json
+ulimit -n 1048576 # open files
 
 echo "N8N_VERSION=${n8nVersion}" >> /home/ubuntu/n8n/.env
 echo "EXECUTIONS_PROCESS=${n8nExecutionsProcess}" >> /home/ubuntu/n8n/.env
@@ -15,3 +9,5 @@ echo "EXECUTIONS_MODE=${n8nExecutionsMode}" >> /home/ubuntu/n8n/.env
 sleep 1
 
 sudo docker-compose -f /home/ubuntu/n8n/docker-compose.yml up -d
+
+sleep 10

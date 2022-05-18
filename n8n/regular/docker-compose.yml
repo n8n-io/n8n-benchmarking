@@ -2,12 +2,12 @@ version: '3.1'
 
 services:
   n8n:
-    image: n8nio/n8n
+    image: n8nio/n8n:${N8N_VERSION}
     restart: always
     ports:
       - 5678:5678
     volumes:
-      - /home/ubuntu/n8n/appdata:/home/node/.n8n
+      - ~/.n8n:/home/node/.n8n
     environment:
       - N8N_USER_MANAGEMENT_DISABLED=true
       - N8N_DIAGNOSTICS_ENABLED=false
@@ -18,4 +18,4 @@ services:
       - N8N_LOG_LEVEL=error
       - EXECUTIONS_DATA_SAVE_ON_SUCCESS=none
       - EXECUTIONS_DATA_SAVE_ON_ERROR=none
-    command: /bin/sh -c "n8n import:workflow --separate --input=/home/node/.n8n/workflows/; n8n start"
+    command: /bin/sh -c "n8n start"
