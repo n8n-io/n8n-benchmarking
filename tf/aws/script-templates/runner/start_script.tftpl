@@ -1,22 +1,22 @@
 #!/bin/bash
 
 ulimit -n 1048576 # open files
-mkdir -p /home/ubuntu/vegeta/results
+mkdir -p ~/vegeta/results
 
-wget -O /home/ubuntu/vegeta/vegeta_12.8.4_linux_amd64.tar.gz https://github.com/tsenart/vegeta/releases/download/v12.8.4/vegeta_12.8.4_linux_amd64.tar.gz
-tar -xf /home/ubuntu/vegeta/vegeta_12.8.4_linux_amd64.tar.gz -C /home/ubuntu/vegeta
+wget -O ~/vegeta/vegeta_12.8.4_linux_amd64.tar.gz https://github.com/tsenart/vegeta/releases/download/v12.8.4/vegeta_12.8.4_linux_amd64.tar.gz
+tar -xf ~/vegeta/vegeta_12.8.4_linux_amd64.tar.gz -C ~/vegeta
 
-/home/ubuntu/vegeta/workers_health.sh ${workerIp} ${queueWorkerIp1} ${queueWorkerIp2} ${queueWorkerIp3}
+~/vegeta/workers_health.sh ${workerIp} ${queueWorkerIp1} ${queueWorkerIp2} ${queueWorkerIp3}
 
-curl -X POST -H "Content-Type: application/json" -d @/home/ubuntu/n8n/appdata/workflows/workflow-1.json ${workerIp}/rest/workflows | jq '.data' > /tmp/w.json
+curl -X POST -H "Content-Type: application/json" -d @~/n8n/appdata/workflows/workflow-1.json ${workerIp}/rest/workflows | jq '.data' > /tmp/w.json
 wid=`jq '.id' /tmp/w.json -r`
 curl -X PATCH -H "Content-Type: application/json" -d @/tmp/w.json ${workerIp}/rest/workflows/$wid
 
-curl -X POST -H "Content-Type: application/json" -d @/home/ubuntu/n8n/appdata/workflows/workflow-2.json ${workerIp}/rest/workflows | jq '.data' > /tmp/w.json
+curl -X POST -H "Content-Type: application/json" -d @~/n8n/appdata/workflows/workflow-2.json ${workerIp}/rest/workflows | jq '.data' > /tmp/w.json
 wid=`jq '.id' /tmp/w.json -r`
 curl -X PATCH -H "Content-Type: application/json" -d @/tmp/w.json ${workerIp}/rest/workflows/$wid
 
-sudo mv /home/ubuntu/vegeta/${testFile} /home/ubuntu/vegeta/tests
+sudo mv ~/vegeta/${testFile} ~/vegeta/tests
 
-sudo /home/ubuntu/vegeta/run_tests.sh 180 ${workerIp} ${queueWorkerIp1} ${queueWorkerIp2} ${queueWorkerIp3}
-sudo /home/ubuntu/vegeta/results_to_csv.sh ${n8nMode} ${workerInstanceSize} ${resultsRecieverURL}
+sudo ~/vegeta/run_tests.sh 180 ${workerIp} ${queueWorkerIp1} ${queueWorkerIp2} ${queueWorkerIp3}
+sudo ~/vegeta/results_to_csv.sh ${n8nMode} ${workerInstanceSize} ${resultsRecieverURL}

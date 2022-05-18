@@ -48,56 +48,56 @@ locals {
     ${jsonencode({
   write_files = [
     {
-      path        = "/home/ubuntu/vegeta/tests-main"
+      path        = "~/vegeta/tests-main"
       permissions = "0755"
       owner       = "root:root"
       encoding    = "b64"
       content     = filebase64("${path.module}/../../vegeta/tests-main")
     },
     {
-      path        = "/home/ubuntu/vegeta/tests-own"
+      path        = "~/vegeta/tests-own"
       permissions = "0755"
       owner       = "root:root"
       encoding    = "b64"
       content     = filebase64("${path.module}/../../vegeta/tests-own")
     },
     {
-      path        = "/home/ubuntu/vegeta/tests-queue"
+      path        = "~/vegeta/tests-queue"
       permissions = "0755"
       owner       = "root:root"
       encoding    = "b64"
       content     = filebase64("${path.module}/../../vegeta/tests-queue")
     },
     {
-      path        = "/home/ubuntu/vegeta/workers_health.sh"
+      path        = "~/vegeta/workers_health.sh"
       permissions = "0755"
       owner       = "root:root"
       encoding    = "b64"
       content     = filebase64("${path.module}/../../vegeta/workers_health.sh")
     },
     {
-      path        = "/home/ubuntu/vegeta/results_to_csv.sh"
+      path        = "~/vegeta/results_to_csv.sh"
       permissions = "0755"
       owner       = "root:root"
       encoding    = "b64"
       content     = filebase64("${path.module}/../../vegeta/results_to_csv.sh")
     },
     {
-      path        = "/home/ubuntu/vegeta/run_tests.sh"
+      path        = "~/vegeta/run_tests.sh"
       permissions = "0755"
       owner       = "root:root"
       encoding    = "b64"
       content     = filebase64("${path.module}/../../vegeta/run_tests.sh")
     },
     {
-      path        = "/home/ubuntu/n8n/appdata/workflows/workflow-1.json"
+      path        = "~/n8n/appdata/workflows/workflow-1.json"
       permissions = "0644"
       owner       = "root:root"
       encoding    = "b64"
       content     = filebase64("${path.module}/../../n8n/workflows/workflow-1.json")
     },
     {
-      path        = "/home/ubuntu/n8n/appdata/workflows/workflow-2.json"
+      path        = "~/n8n/appdata/workflows/workflow-2.json"
       permissions = "0644"
       owner       = "root:root"
       encoding    = "b64"
@@ -156,7 +156,7 @@ data "cloudinit_config" "main_worker_init" {
     ${jsonencode({
   write_files = [
     {
-      path        = "/home/ubuntu/n8n/docker-compose.yml"
+      path        = "~/n8n/docker-compose.yml"
       permissions = "0644"
       owner       = "root:root"
       encoding    = "b64"
@@ -243,7 +243,7 @@ data "cloudinit_config" "own_worker_init" {
     ${jsonencode({
   write_files = [
     {
-      path        = "/home/ubuntu/n8n/docker-compose.yml"
+      path        = "~/n8n/docker-compose.yml"
       permissions = "0644"
       owner       = "root:root"
       encoding    = "b64"
@@ -288,28 +288,28 @@ locals {
 #     ${jsonencode({
 #   write_files = [
 #     {
-#       path        = "/home/ubuntu/vegeta/tests"
+#       path        = "~/vegeta/tests"
 #       permissions = "0755"
 #       owner       = "root:root"
 #       encoding    = "b64"
 #       content     = filebase64("${path.module}/../../vegeta/tests-queue")
 #     },
 #     {
-#       path        = "/home/ubuntu/vegeta/workers_health.sh"
+#       path        = "~/vegeta/workers_health.sh"
 #       permissions = "0755"
 #       owner       = "root:root"
 #       encoding    = "b64"
 #       content     = filebase64("${path.module}/../../vegeta/workers_health.sh")
 #     },
 #     {
-#       path        = "/home/ubuntu/vegeta/results_to_csv.sh"
+#       path        = "~/vegeta/results_to_csv.sh"
 #       permissions = "0755"
 #       owner       = "root:root"
 #       encoding    = "b64"
 #       content     = filebase64("${path.module}/../../vegeta/results_to_csv.sh")
 #     },
 #     {
-#       path        = "/home/ubuntu/vegeta/run_tests.sh"
+#       path        = "~/vegeta/run_tests.sh"
 #       permissions = "0755"
 #       owner       = "root:root"
 #       encoding    = "b64"
@@ -382,28 +382,28 @@ locals {
     ${jsonencode({
   write_files = [
     {
-      path        = "/home/ubuntu/n8n/appdata/workflows/workflow-1.json"
+      path        = "~/n8n/appdata/workflows/workflow-1.json"
       permissions = "0644"
       owner       = "root:root"
       encoding    = "b64"
       content     = filebase64("${path.module}/../../n8n/workflows/workflow-1.json")
     },
     {
-      path        = "/home/ubuntu/n8n/appdata/workflows/workflow-2.json"
+      path        = "~/n8n/appdata/workflows/workflow-2.json"
       permissions = "0644"
       owner       = "root:root"
       encoding    = "b64"
       content     = filebase64("${path.module}/../../n8n/workflows/workflow-2.json")
     },
     {
-      path        = "/home/ubuntu/n8n/docker-compose.yml"
+      path        = "~/n8n/docker-compose.yml"
       permissions = "0644"
       owner       = "root:root"
       encoding    = "b64"
       content     = filebase64("${path.module}/../../n8n/queue/docker-compose.yml")
     },
     {
-      path        = "/home/ubuntu/n8n/init-data.sh"
+      path        = "~/n8n/init-data.sh"
       permissions = "0644"
       owner       = "root:root"
       encoding    = "b64"
@@ -452,7 +452,7 @@ locals {
     ${jsonencode({
   write_files = [
     {
-      path        = "/home/ubuntu/n8n/docker-compose.yml"
+      path        = "~/n8n/docker-compose.yml"
       permissions = "0644"
       owner       = "root:root"
       encoding    = "b64"

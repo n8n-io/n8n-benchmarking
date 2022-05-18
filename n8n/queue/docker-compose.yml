@@ -14,7 +14,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - /home/ubuntu/n8n/init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
+      - ~/n8n/init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
 
   n8n:
     image: n8nio/n8n:${N8N_VERSION}
@@ -43,7 +43,7 @@ services:
       - postgres
       - redis
     volumes:
-      - /home/ubuntu/n8n/appdata:/home/node/.n8n
+      - ~/n8n/appdata:/home/node/.n8n
     # Wait 5 seconds to start n8n to make sure that PostgreSQL is ready
     # when n8n tries to connect to it
     command: /bin/sh -c "sleep 5; n8n start"

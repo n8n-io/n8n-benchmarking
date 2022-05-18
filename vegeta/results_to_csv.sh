@@ -1,6 +1,6 @@
 #!/bin/bash
 
-path=/home/ubuntu/vegeta
+path=~/vegeta
 # path=.
 
 for wf in {1..2}

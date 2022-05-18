@@ -2,12 +2,12 @@
 
 ulimit -n 1048576 # open files
 
-mkdir -p /home/ubuntu/n8n/appdata
+mkdir -p ~/n8n/appdata
 
-echo "N8N_VERSION=${n8nVersion}" >> /home/ubuntu/n8n/.env
-echo "DB_POSTGRESDB_HOST=${postgresHost}" >> /home/ubuntu/n8n/.env
-echo "QUEUE_BULL_REDIS_HOST=${redisHost}" >> /home/ubuntu/n8n/.env
+echo "N8N_VERSION=${n8nVersion}" >> ~/n8n/.env
+echo "DB_POSTGRESDB_HOST=${postgresHost}" >> ~/n8n/.env
+echo "QUEUE_BULL_REDIS_HOST=${redisHost}" >> ~/n8n/.env
 
 sleep 1
 
-sudo docker-compose -f /home/ubuntu/n8n/docker-compose.yml up -d
+sudo docker-compose -f ~/n8n/docker-compose.yml up -d
