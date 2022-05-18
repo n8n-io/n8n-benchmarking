@@ -7,7 +7,7 @@ services:
     ports:
       - 5678:5678
     volumes:
-      - ~/.n8n:/home/node/.n8n
+      - /home/ubuntu/.n8n:/home/node/.n8n
     environment:
       - N8N_USER_MANAGEMENT_DISABLED=true
       - N8N_DIAGNOSTICS_ENABLED=false
