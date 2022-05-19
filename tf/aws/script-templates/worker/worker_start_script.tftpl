@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ulimit -n 1048576 # open files
+sysctl -w fs.file-max=65535
 
 echo "N8N_VERSION=${n8nVersion}" >> /home/ubuntu/n8n/.env
 echo "EXECUTIONS_PROCESS=${n8nExecutionsProcess}" >> /home/ubuntu/n8n/.env

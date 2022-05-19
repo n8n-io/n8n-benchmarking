@@ -39,6 +39,10 @@ services:
       - EXECUTIONS_DATA_SAVE_ON_ERROR=none
     ports:
       - 5678:5678
+    ulimits:
+      nofile:
+        soft: "65536"
+        hard: "65536"
     depends_on:
       - postgres
       - redis

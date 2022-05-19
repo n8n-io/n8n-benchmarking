@@ -26,6 +26,10 @@ services:
       - QUEUE_HEALTH_CHECK_ACTIVE=true
     ports:
       - 5679:5678
+    ulimits:
+      nofile:
+        soft: "65536"
+        hard: "65536"
     volumes:
       - /home/ubuntu/n8n/appdata:/home/node/.n8n
     # Wait 5 seconds to start n8n to make sure that PostgreSQL is ready
