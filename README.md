@@ -7,11 +7,11 @@ Customizable and extendable benchmarking framework for n8n.io
 ## Usage
 
 
-### Requirements
+## Requirements
 - AWS console
 - terraform
 
-### Steps
+## Steps
 
 1. Install [terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/aws-get-started)
 
@@ -25,9 +25,16 @@ Customizable and extendable benchmarking framework for n8n.io
 
 6. Run `terraform apply` and enter 'yes' when propmpted
 
-### How it works
+## How it works
 
+### Concepts
+- Runner: An EC2 instance that runs the tests
+- Worker: An EC2 instance running n8n being load tested
 
+### Process
 
+Once `terraform apply` is run, it will try to create Runner and Worker instance as configured in the `main.tf` file.
 
+Runner will wait for the worker instances to be ready, and then run tests as defined in the mode specific tests file (`tests-own`, `tests-main`, `tests-queue`) in the vegeta folder.
 
+After the tests have completed, the results are send via a post call in JSON format, to the endpoint specified in `main.tf` in the variable `resultsRecieverURL`. `resultsRecieverURL` must be an endpoint that accepts POST requests with JSON payload.
