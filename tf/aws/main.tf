@@ -11,30 +11,38 @@ terraform {
 
 provider "aws" {
   profile = "default"
-  region  = "eu-central-1"
+  region  = "${var.aws_default_region}"
 }
 
-variable "ami-worker" {
+variable "aws_default_region" {
+  description = "AWS region"
+}
+
+variable "ami_worker" {
   default = "ami-0d2c65fedcacc5f45"
+  description = "AWS image to use for worker container"
 }
 
-variable "ami-runner" {
+variable "ami_runner" {
   default = "ami-0bf65bd445cd54014"
+  description = "AWS image to use for runner container"
 }
 
-variable "instance-type-small" {
+variable "instance_type_runner" {
   default = "t3.small"
+  description = "Instance type for runner"
 }
 
-variable "instance-type-large" {
+variable "instance_type_worker" {
   default = "c5a.large"
+  description = "Instance type for worker"
 }
 
-variable "resultsRecieverURL" {
-  default = "https://ahsan.app.n8n.cloud/webhook/submit-result"
+variable "results_reciever_url" {
+  description = "Endpoint to post test results"
 }
 
-variable "n8n-version" {
+variable "n8n_version" {
   default = "0.177.0"
 }
 
@@ -124,8 +132,8 @@ data "cloudinit_config" "main_runner_init" {
       workerIp           = "${local.worker_main_ip}:5678",
       testFile           = "tests-main",
       n8nMode            = "main",
-      workerInstanceSize = "${var.instance-type-large}",
-      resultsRecieverURL = "${var.resultsRecieverURL}",
+      workerInstanceSize = "${var.instance_type_worker}",
+      resultsRecieverUrl = "${var.results_reciever_url}",
       queueWorkerIp1 = "",
       queueWorkerIp2 = "",
       queueWorkerIp3 = ""
@@ -134,8 +142,8 @@ data "cloudinit_config" "main_runner_init" {
 }
 
 resource "aws_instance" "runner-main" {
-  ami           = var.ami-runner
-  instance_type = var.instance-type-small
+  ami           = var.ami_runner
+  instance_type = var.instance_type_runner
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.main_runner_init.rendered
   tags = {
@@ -171,14 +179,14 @@ data "cloudinit_config" "main_worker_init" {
     content = templatefile("${path.module}/script-templates/worker/worker_start_script.tftpl", {
       n8nExecutionsProcess = "main",
       n8nExecutionsMode    = "regular",
-      n8nVersion           = "${var.n8n-version}"
+      n8nVersion           = "${var.n8n_version}"
     })
   }
 }
 
 resource "aws_instance" "worker-main" {
-  ami           = var.ami-worker
-  instance_type = var.instance-type-large
+  ami           = var.ami_worker
+  instance_type = var.instance_type_worker
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.main_worker_init.rendered
   tags = {
@@ -209,8 +217,8 @@ data "cloudinit_config" "own_runner_init" {
       workerIp           = "${local.worker_own_ip}:5678",
       testFile           = "tests-own",
       n8nMode            = "own",
-      workerInstanceSize = "${var.instance-type-large}",
-      resultsRecieverURL = "${var.resultsRecieverURL}",
+      workerInstanceSize = "${var.instance_type_worker}",
+      resultsRecieverUrl = "${var.results_reciever_url}",
       queueWorkerIp1 = "",
       queueWorkerIp2 = "",
       queueWorkerIp3 = ""
@@ -220,8 +228,8 @@ data "cloudinit_config" "own_runner_init" {
 
 
 resource "aws_instance" "runner-own" {
-  ami           = var.ami-runner
-  instance_type = var.instance-type-small
+  ami           = var.ami_runner
+  instance_type = var.instance_type_runner
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.own_runner_init.rendered
   tags = {
@@ -257,14 +265,14 @@ data "cloudinit_config" "own_worker_init" {
     content = templatefile("${path.module}/script-templates/worker/worker_start_script.tftpl", {
       n8nExecutionsProcess = "own",
       n8nExecutionsMode    = "regular",
-      n8nVersion           = "${var.n8n-version}"
+      n8nVersion           = "${var.n8n_version}"
     })
   }
 }
 
 resource "aws_instance" "worker-own" {
-  ami           = var.ami-worker
-  instance_type = var.instance-type-large
+  ami           = var.ami_worker
+  instance_type = var.instance_type_worker
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.own_worker_init.rendered
   tags = {
@@ -298,8 +306,8 @@ data "cloudinit_config" "runner_init_queue" {
       workerIp           = "${local.worker_queue_main_ip}:5678",
       testFile           = "tests-queue",
       n8nMode            = "queue",
-      workerInstanceSize = "${var.instance-type-large}",
-      resultsRecieverURL = "${var.resultsRecieverURL}",
+      workerInstanceSize = "${var.instance_type_worker}",
+      resultsRecieverUrl = "${var.results_reciever_url}",
       queueWorkerIp1 = "${local.worker_queue_worker_1_ip}:5679",
       queueWorkerIp2 = "${local.worker_queue_worker_2_ip}:5679",
       queueWorkerIp3 = "${local.worker_queue_worker_3_ip}:5679"
@@ -309,8 +317,8 @@ data "cloudinit_config" "runner_init_queue" {
 
 
 resource "aws_instance" "runner-queue" {
-  ami           = var.ami-runner
-  instance_type = var.instance-type-small
+  ami           = var.ami_runner
+  instance_type = var.instance_type_runner
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.runner_init_queue.rendered
   tags = {
@@ -371,14 +379,14 @@ data "cloudinit_config" "queue_main_worker_init" {
     content = templatefile("${path.module}/script-templates/worker/queue_main_worker_start_script.tftpl", {
       postgresHost = "postgres",
       redisHost    = "redis",
-      n8nVersion   = "${var.n8n-version}"
+      n8nVersion   = "${var.n8n_version}"
     })
   }
 }
 
 resource "aws_instance" "worker-queue-main" {
-  ami           = var.ami-worker
-  instance_type = var.instance-type-large
+  ami           = var.ami_worker
+  instance_type = var.instance_type_worker
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.queue_main_worker_init.rendered
 
@@ -419,14 +427,14 @@ data "cloudinit_config" "queue_worker_init" {
     content = templatefile("${path.module}/script-templates/worker/queue_worker_start_script.tftpl", {
       postgresHost = "${local.worker_queue_main_ip}",
       redisHost    = "${local.worker_queue_main_ip}",
-      n8nVersion   = "${var.n8n-version}"
+      n8nVersion   = "${var.n8n_version}"
     })
   }
 }
 
 resource "aws_instance" "worker-queue-worker-1" {
-  ami           = var.ami-worker
-  instance_type = var.instance-type-large
+  ami           = var.ami_worker
+  instance_type = var.instance_type_worker
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.queue_worker_init.rendered
   tags = {
@@ -435,8 +443,8 @@ resource "aws_instance" "worker-queue-worker-1" {
 }
 
 resource "aws_instance" "worker-queue-worker-2" {
-  ami           = var.ami-worker
-  instance_type = var.instance-type-large
+  ami           = var.ami_worker
+  instance_type = var.instance_type_worker
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.queue_worker_init.rendered
   tags = {
@@ -445,8 +453,8 @@ resource "aws_instance" "worker-queue-worker-2" {
 }
 
 resource "aws_instance" "worker-queue-worker-3" {
-  ami           = var.ami-worker
-  instance_type = var.instance-type-large
+  ami           = var.ami_worker
+  instance_type = var.instance_type_worker
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.queue_worker_init.rendered
   tags = {
