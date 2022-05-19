@@ -44,7 +44,6 @@ locals {
   worker_main_ip           = aws_instance.worker-main.private_ip
 
   benchmark_scripts = <<-END
-    #cloud-config
     ${jsonencode({
   write_files = [
     {
@@ -152,7 +151,6 @@ data "cloudinit_config" "main_worker_init" {
     content_type = "text/cloud-config"
     filename     = "workflows"
     content      = <<-END
-    #cloud-config
     ${jsonencode({
   write_files = [
     {
@@ -239,7 +237,6 @@ data "cloudinit_config" "own_worker_init" {
     content_type = "text/cloud-config"
     filename     = "workflows"
     content      = <<-END
-    #cloud-config
     ${jsonencode({
   write_files = [
     {
@@ -275,49 +272,13 @@ resource "aws_instance" "worker-own" {
   }
 }
 
-# // QUEUE_MODE
+// QUEUE_MODE
 
 locals {
   worker_queue_main_ip           = aws_instance.worker-queue-main.private_ip
   worker_queue_worker_1_ip           = aws_instance.worker-queue-worker-1.private_ip
   worker_queue_worker_2_ip           = aws_instance.worker-queue-worker-2.private_ip
   worker_queue_worker_3_ip           = aws_instance.worker-queue-worker-3.private_ip
-
-#   benchmark_scripts_queue = <<-END
-#     #cloud-config
-#     ${jsonencode({
-#   write_files = [
-#     {
-#       path        = "/home/ubuntu/vegeta/tests"
-#       permissions = "0755"
-#       owner       = "root:root"
-#       encoding    = "b64"
-#       content     = filebase64("${path.module}/../../vegeta/tests-queue")
-#     },
-#     {
-#       path        = "/home/ubuntu/vegeta/workers_health.sh"
-#       permissions = "0755"
-#       owner       = "root:root"
-#       encoding    = "b64"
-#       content     = filebase64("${path.module}/../../vegeta/workers_health.sh")
-#     },
-#     {
-#       path        = "/home/ubuntu/vegeta/results_to_csv.sh"
-#       permissions = "0755"
-#       owner       = "root:root"
-#       encoding    = "b64"
-#       content     = filebase64("${path.module}/../../vegeta/results_to_csv.sh")
-#     },
-#     {
-#       path        = "/home/ubuntu/vegeta/run_tests.sh"
-#       permissions = "0755"
-#       owner       = "root:root"
-#       encoding    = "b64"
-#       content     = filebase64("${path.module}/../../vegeta/run_tests.sh")
-#     },
-#   ]
-# })}
-#   END
 }
 
 data "cloudinit_config" "runner_init_queue" {
@@ -357,28 +318,8 @@ resource "aws_instance" "runner-queue" {
   }
 }
 
-# resource "aws_instance" "runner-queue" {
-#   ami           = var.ami-runner
-#   instance_type = var.instance-type-small
-#   key_name      = "aws-test-instance-01-keypair"
-#   user_data = templatefile("${path.module}/script-templates/runner/start_script.tftpl", {
-#     workerIp           = local.worker_queue_main_ip,
-#     queueWorkerIp1     = local.worker_queue_worker_1_ip,
-#     queueWorkerIp2     = local.worker_queue_worker_2_ip,
-#     queueWorkerIp3     = local.worker_queue_worker_3_ip,
-#     testFile           = "tests-queue",
-#     n8nMode            = "queue",
-#     workerInstanceSize = "${var.instance-type-large}",
-#     resultsRecieverURL = "${var.resultsRecieverURL}"
-#   })
-#   tags = {
-#     Name = "n8n-benchmark_runner_queue-mode"
-#   }
-# }
-
 locals {
   queue_main_worker_files = <<-END
-    #cloud-config
     ${jsonencode({
   write_files = [
     {
@@ -448,7 +389,6 @@ resource "aws_instance" "worker-queue-main" {
 
 locals {
   queue_worker_files = <<-END
-    #cloud-config
     ${jsonencode({
   write_files = [
     {
