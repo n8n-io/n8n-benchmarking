@@ -13,11 +13,16 @@ Customizable and extendable benchmarking framework for n8n.io
 
 ### Steps
 
-1. Install requirements
-2. Clone this repository
-3. Authorise terraform to connect to aws account
-4. Update variables in main.tf as needed
-5. init terraform
+1. Install [terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/aws-get-started)
+
+2. Clone this repository, and open `tf/aws` folder in the terminal
+
+3. Run `terraform init`
+
+4. Set [AWS Access keys environment variables](https://learn.hashicorp.com/tutorials/terraform/aws-build#prerequisites) or use any of the authentication methods [provided here](https://www.terraform.io/docs/providers/aws/index.html#environment-variables)
+
+5. Update variables in main.tf as needed
+
 6. Run `terraform apply` and enter 'yes' when propmpted
 
 ### How it works

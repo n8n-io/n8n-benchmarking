@@ -19,4 +19,4 @@ curl -X PATCH -H "Content-Type: application/json" -d @/tmp/w.json ${workerIp}/re
 sudo mv /home/ubuntu/vegeta/${testFile} /home/ubuntu/vegeta/tests
 
 sudo /home/ubuntu/vegeta/run_tests.sh 180 ${workerIp} ${queueWorkerIp1} ${queueWorkerIp2} ${queueWorkerIp3}
-sudo /home/ubuntu/vegeta/results_to_csv.sh ${n8nMode} ${workerInstanceSize} ${resultsRecieverURL}
+sudo /home/ubuntu/vegeta/results_to_csv.sh ${n8nMode} ${workerInstanceSize} ${resultsRecieverUrl}
