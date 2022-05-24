@@ -46,6 +46,41 @@ variable "n8n_version" {
   default = "0.177.0"
 }
 
+resource "aws_security_group" "allow_n8n_ssh" {
+  name        = "allow_n8n_ssh"
+  description = "Allow SSH and n8n inbound traffic"
+
+  ingress {
+    description      = "SSH"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  ingress {
+    description      = "n8n"
+    from_port        = 5678
+    to_port          = 5678
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = {
+    Name = "allow_n8n_ssh"
+  }
+}
+
 // MAIN_MODE
 
 locals {
@@ -146,6 +181,7 @@ resource "aws_instance" "runner-main" {
   instance_type = var.instance_type_runner
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.main_runner_init.rendered
+  vpc_security_group_ids = [ aws_security_group.allow_n8n_ssh.id ]
   tags = {
     Name = "n8n-benchmark_runner_main-mode"
   }
@@ -189,6 +225,7 @@ resource "aws_instance" "worker-main" {
   instance_type = var.instance_type_worker
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.main_worker_init.rendered
+  vpc_security_group_ids = [ aws_security_group.allow_n8n_ssh.id ]
   tags = {
     Name = "n8n-benchmark_worker_main-mode"
   }
@@ -232,6 +269,7 @@ resource "aws_instance" "runner-own" {
   instance_type = var.instance_type_runner
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.own_runner_init.rendered
+  vpc_security_group_ids = [ aws_security_group.allow_n8n_ssh.id ]
   tags = {
     Name = "n8n-benchmark_runner_own-mode"
   }
@@ -275,6 +313,7 @@ resource "aws_instance" "worker-own" {
   instance_type = var.instance_type_worker
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.own_worker_init.rendered
+  vpc_security_group_ids = [ aws_security_group.allow_n8n_ssh.id ]
   tags = {
     Name = "n8n-benchmark_worker_own-mode"
   }
@@ -321,6 +360,7 @@ resource "aws_instance" "runner-queue" {
   instance_type = var.instance_type_runner
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.runner_init_queue.rendered
+  vpc_security_group_ids = [ aws_security_group.allow_n8n_ssh.id ]
   tags = {
     Name = "n8n-benchmark_runner_queue-mode"
   }
@@ -389,7 +429,7 @@ resource "aws_instance" "worker-queue-main" {
   instance_type = var.instance_type_worker
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.queue_main_worker_init.rendered
-
+  vpc_security_group_ids = [ aws_security_group.allow_n8n_ssh.id ]
   tags = {
     Name = "n8n-benchmark_worker_queue-main"
   }
@@ -437,6 +477,7 @@ resource "aws_instance" "worker-queue-worker-1" {
   instance_type = var.instance_type_worker
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.queue_worker_init.rendered
+  vpc_security_group_ids = [ aws_security_group.allow_n8n_ssh.id ]
   tags = {
     Name = "n8n-benchmark_worker_queue-worker-1"
   }
@@ -447,6 +488,7 @@ resource "aws_instance" "worker-queue-worker-2" {
   instance_type = var.instance_type_worker
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.queue_worker_init.rendered
+  vpc_security_group_ids = [ aws_security_group.allow_n8n_ssh.id ]
   tags = {
     Name = "n8n-benchmark_worker_queue-worker-2"
   }
@@ -457,6 +499,7 @@ resource "aws_instance" "worker-queue-worker-3" {
   instance_type = var.instance_type_worker
   key_name      = "aws-test-instance-01-keypair"
   user_data     = data.cloudinit_config.queue_worker_init.rendered
+  vpc_security_group_ids = [ aws_security_group.allow_n8n_ssh.id ]
   tags = {
     Name = "n8n-benchmark_worker_queue-worker-3"
   }
