@@ -19,12 +19,12 @@ variable "aws_default_region" {
 }
 
 variable "ami_worker" {
-  default = "ami-0d2c65fedcacc5f45"
+  default = "ami-01bcb21f02a5da66f"
   description = "AWS image to use for worker container"
 }
 
 variable "ami_runner" {
-  default = "ami-0bf65bd445cd54014"
+  default = "ami-01bcb21f02a5da66f"
   description = "AWS image to use for runner container"
 }
 

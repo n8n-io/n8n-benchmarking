@@ -28,3 +28,7 @@ Some keywords:
 - Worker: Instance running n8n being load tested
 
 More details and complete readme coming soon...
+
+## Hooks
+
+Once the tests have completed, results will be posted to the provided endpoint.
