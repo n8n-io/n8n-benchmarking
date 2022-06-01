@@ -3,6 +3,8 @@
 ulimit -n 1048576 # open files
 sysctl -w fs.file-max=65535
 
+mkdir -p /home/ubuntu/n8n/appdata
+
 echo "N8N_VERSION=${n8nVersion}" >> /home/ubuntu/n8n/.env
 echo "EXECUTIONS_PROCESS=${n8nExecutionsProcess}" >> /home/ubuntu/n8n/.env
 echo "EXECUTIONS_MODE=${n8nExecutionsMode}" >> /home/ubuntu/n8n/.env
