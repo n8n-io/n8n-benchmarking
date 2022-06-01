@@ -13,12 +13,17 @@ sudo mv /home/ubuntu/vegeta/${testFile} /home/ubuntu/vegeta/tests
 curl -X POST -H "Content-Type: application/json" -d @/home/ubuntu/n8n/appdata/workflows/workflow-1.json ${workerIp}/rest/workflows | jq '.data' > /tmp/w.json
 wid=`jq '.id' /tmp/w.json -r`
 curl -X PATCH -H "Content-Type: application/json" -d @/tmp/w.json ${workerIp}/rest/workflows/$wid
+echo "GET http://${webhookIp1}/webhook/workflow-1" >> /home/ubuntu/vegeta/targets-1
+echo "GET http://${webhookIp2}/webhook/workflow-1" >> /home/ubuntu/vegeta/targets-1
 
 curl -X POST -H "Content-Type: application/json" -d @/home/ubuntu/n8n/appdata/workflows/workflow-2.json ${workerIp}/rest/workflows | jq '.data' > /tmp/w.json
 wid=`jq '.id' /tmp/w.json -r`
 curl -X PATCH -H "Content-Type: application/json" -d @/tmp/w.json ${workerIp}/rest/workflows/$wid
+echo "GET http://${webhookIp1}/webhook/workflow-2" >> /home/ubuntu/vegeta/targets-2
+echo "GET http://${webhookIp2}/webhook/workflow-2" >> /home/ubuntu/vegeta/targets-2
 
-/home/ubuntu/vegeta/workflows_health.sh ${workerIp}
+/home/ubuntu/vegeta/workflows_health.sh ${webhookIp1}
+/home/ubuntu/vegeta/workflows_health.sh ${webhookIp2}
 
-sudo /home/ubuntu/vegeta/run_tests.sh 180 ${workerIp} ${queueWorkerIp1} ${queueWorkerIp2} ${queueWorkerIp3}
+sudo /home/ubuntu/vegeta/run_tests_queue.sh ${waitSeconds} ${workerIp} ${queueWorkerIp1} ${queueWorkerIp2} ${queueWorkerIp3}
 sudo /home/ubuntu/vegeta/results_to_csv.sh ${n8nMode} ${workerInstanceSize} ${resultsRecieverUrl}
