@@ -60,7 +60,32 @@ The n8n instances are setup and tests workflows are injected and activated. The 
 
 The results are collected in the runner instances. Once all the tests have completed, the results are sent to the provided endpoint via POST request, in JSON format.
 
-### Output JSON
+## Tests
+Tests are defined in tests file for each of the modes in `vegeta` folder.
+
+```
+1 100 120 100
+1 110 120 100
+```
+
+Each line in the test file defines a test run.
+```
+<workflowId> <rate> <duration in seconds> <timeout in seconds>
+```
+
+## Workflows
+The workflows injected and used to run tests with can be found in `n8n/workflows` folder.
+
+To update, simply create a workflow with webhook node in any n8n instance, download it in a file and paste the contents / replace the file. Make sure the webhook `path` is `workflow-<id>`, where id is the number of the workflow.
+
+It is possible to add more than 2 workflows by modifying the scripts, and tf config.
+
+## Results
+The results are generated and saved in the runner instance under `/home/ubuntu/vegeta/results`.
+
+Once the test runs have finsished on each runner, the results are POSTed to the provided endpoint.
+
+The posted results is an array of results of each run, as described in the `tests-<mode>` file.
 
 ```
 [
@@ -86,27 +111,7 @@ The results are collected in the runner instances. Once all the tests have compl
 ]
 ```
 
-## Tests
-Tests are defined in tests file for each of the modes in `vegeta` folder.
-
-```
-1 100 120 100
-1 110 120 100
-```
-
-Each line in the test file defines a test run.
-```
-<workflowId> <rate> <duration in seconds> <timeout in seconds>
-```
-
-For more details on how these values are used, check out [Vegeta docs](https://github.com/tsenart/vegeta).
-
-## Workflows
-The workflows injected and used to run tests with can be found in `n8n/workflows` folder.
-
-To update, simply create a workflow with webhook node in any n8n instance, download it in a file and paste the contents / replace the file. Make sure the webhook `path` is `workflow-<id>`, where id is the number of the workflow.
-
-It is possible to add more than 2 workflows by modifying the scripts, and tf config.
+To dive deeper on how to interpret these results, check out [Vegeta docs](https://github.com/tsenart/vegeta).
 
 ## Setup
 
@@ -160,7 +165,7 @@ All instances run the relevant start script on initialization via cloud-init. Al
 
 Once the tests have completed, results will be posted to the provided endpoint.
 
-### Teardown
+## Teardown
 
 It is important to teardown the infrastructure once its not needed anymore. That can be done using terraform destroy command.
 
