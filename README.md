@@ -5,24 +5,27 @@
 Customizable and extendable benchmarking framework for n8n.io
 
 ## Requirements
-- terraform
+
+- Terraform
 - AWS account access
 
 ## Usage
 
-1. Install [terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/aws-get-started)
+1. Install [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/aws-get-started).
 
-2. Clone this repository
+2. Clone this repository.
 
-3. Using a terminal, navigate to `n8n-benchmarking/tf/aws` folder and init terraform
+3. Using a terminal, navigate to `n8n-benchmarking/tf/aws` folder and start Terraform.
+
 ```
 $ cd n8n-benchmarking/tf/aws
 $ terraform init
 ```
 
-4. Set [AWS Access keys environment variables](https://learn.hashicorp.com/tutorials/terraform/aws-build#prerequisites) or use any of the authentication methods [provided here](https://www.terraform.io/docs/providers/aws/index.html#environment-variables)
+4. Set [AWS Access keys environment variables](https://learn.hashicorp.com/tutorials/terraform/aws-build#prerequisites) or use any of the authentication methods [provided here](https://www.terraform.io/docs/providers/aws/index.html#environment-variables).
 
-5. Apply terraform config and follow the prompts
+5. Apply Terraform config and follow the prompts
+
 ```
 $ terraform apply
 var.aws_default_region
@@ -50,18 +53,20 @@ aws_security_group.allow_n8n_ssh: Creating...
 ...
 Apply complete! Resources: 12 added, 0 changed, 0 destroyed.
 ```
-6. Wait for the tests to finish and results to be recieved by the provided endpoint.
+
+6. Wait for the tests to finish. The endpoint you provided should receive results.
 
 ## Concept
 
 Deploy and run n8n benchmarking tests using [Vegeta](https://github.com/tsenart/vegeta).
 
-The n8n instances are setup and tests workflows are injected and activated. The workflows are then triggered by Vegeta attacks at various rates.
+Terraform sets up the n8n instances, then loads and activates the tests workflows. The workflows are then triggered by Vegeta attacks at various rates.
 
-The results are collected in the runner instances. Once all the tests have completed, the results are sent to the provided endpoint via POST request, in JSON format.
+The runner instances collect the results. Once all the tests have completed, Terraform sends the results to the provided endpoint using a POST request, in JSON format.
 
 ## Tests
-Tests are defined in tests file for each of the modes in `vegeta` folder.
+
+Tests are defined in tests file for each of the modes in the `vegeta` folder.
 
 ```
 1 100 120 100
@@ -69,18 +74,21 @@ Tests are defined in tests file for each of the modes in `vegeta` folder.
 ```
 
 Each line in the test file defines a test run.
+
 ```
 <workflowId> <rate> <duration in seconds> <timeout in seconds>
 ```
 
 ## Workflows
-The workflows injected and used to run tests with can be found in `n8n/workflows` folder.
 
-To update, simply create a workflow with webhook node in any n8n instance, download it in a file and paste the contents / replace the file. Make sure the webhook `path` is `workflow-<id>`, where id is the number of the workflow.
+The workflows used in the tests are in the `n8n/workflows` folder.
 
-It is possible to add more than 2 workflows by modifying the scripts, and tf config.
+To update, create a workflow with a webhook node in any n8n instance, download it as JSON and paste the contents / replace the file. Make sure the webhook `path` is `workflow-<id>`, where `id` is the number of the workflow.
+
+It is possible to add more than two workflows by modifying the scripts and the Terraform config.
 
 ## Results
+
 The results are generated and saved in the runner instance under `/home/ubuntu/vegeta/results`.
 
 Once the test runs have finsished on each runner, the results are POSTed to the provided endpoint.
@@ -111,49 +119,51 @@ The posted results is an array of results of each run, as described in the `test
 ]
 ```
 
-To dive deeper on how to interpret these results, check out [Vegeta docs](https://github.com/tsenart/vegeta).
+For more information on how to interpret these results, check out the [Vegeta docs](https://github.com/tsenart/vegeta).
 
 ## Setup
 
 ### Instances
 
-Running the terraform apply command would trigger creation of ec2 instances for workers and runners for 3 different modes of n8n:
+Running the Terraform apply command triggers creation of ec2 instances for workers and runners for three different modes of n8n:
+
 - [Own mode](https://docs.n8n.io/hosting/scaling/execution-modes-processes/#own)
-    - 1 Runner instance
-    - 1 Worker instance
+    - One runner instance
+    - One worker instance
 - [Main mode](https://docs.n8n.io/hosting/scaling/execution-modes-processes/#main)
-    - 1 Runner instance
-    - 1 Worker instance
+    - One runner instance
+    - One worker instance
 - [Queue mode](https://docs.n8n.io/hosting/scaling/queue-mode/)
-    - 1 Runner instance
-    - 1 Worker instance for main process running:
+    - One runner instance
+    - One worker instance for main process running:
         - n8n main process
         - postgres server
         - redis server
-    - 3 Worker instances running n8n queue mode worker
-    - 2 Worker instances running n8n queue mode webhook
+    - Three worker instances running n8n queue mode worker
+    - Two worker instances running n8n queue mode webhook
 
-### Security Group
+### Security group
 
 An AWS security group will also be created to allow traffic between the instances.
 
-### AWS Image
+### AWS image
 
-The worker and runner instances use publicly available AMI `n8n Benchmark AMI` (ami-01bcb21f02a5da66f) created by n8n.
+The worker and runner instances use a publicly available AMI `n8n Benchmark AMI` (ami-01bcb21f02a5da66f) created by n8n.
 
-This AMI has docker, docker-compose etc installed.
+This AMI has docker, docker-compose and so on installed.
 
-<br>
 
 ## Process
 
-All instances run the relevant start script on initialization via cloud-init. All relevant files are injected through terraform.
+All instances run the relevant start script on initialization using cloud-init. All relevant files are injected through Terraform.
 
 ### Worker instance
-- Creates .env file for n8n docker-compose
+
+- Creates a `.env` file for n8n docker-compose
 - Runs docker-compose
 
 ### Runner instances
+
 - Downloads and sets up Vegeta
 - Checks for worker health
 - Injects and activates workflows into the worker n8n instance
@@ -167,7 +177,7 @@ Once the tests have completed, results will be posted to the provided endpoint.
 
 ## Teardown
 
-It is important to teardown the infrastructure once its not needed anymore. That can be done using terraform destroy command.
+It is important to teardown the infrastructure once it's not needed anymore. That can be done using the Terraform destroy command.
 
 ```
 $ terraform destroy                
