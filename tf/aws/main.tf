@@ -46,6 +46,11 @@ variable "n8n_version" {
   default = "0.177.0"
 }
 
+variable "n8n_concurrency" {
+  description = "n8n worker concurrency level"
+  default = "10"
+}
+
 resource "aws_security_group" "allow_n8n_ssh" {
   name        = "allow_n8n_ssh"
   description = "Allow SSH and n8n inbound traffic"
@@ -508,9 +513,10 @@ data "cloudinit_config" "queue_worker_init" {
     content_type = "text/x-shellscript"
     filename     = "example.sh"
     content = templatefile("${path.module}/script-templates/worker/queue_worker_start_script.tftpl", {
-      postgresHost = "${local.worker_queue_main_ip}",
-      redisHost    = "${local.worker_queue_main_ip}",
-      n8nVersion   = "${var.n8n_version}"
+      postgresHost   = "${local.worker_queue_main_ip}",
+      redisHost      = "${local.worker_queue_main_ip}",
+      n8nVersion     = "${var.n8n_version}",
+	  n8nConcurrency = "${var.n8n_concurrency}"
     })
   }
 }
@@ -578,9 +584,10 @@ data "cloudinit_config" "queue_webhook_init" {
     content_type = "text/x-shellscript"
     filename     = "example.sh"
     content = templatefile("${path.module}/script-templates/worker/queue_worker_start_script.tftpl", {
-      postgresHost = "${local.worker_queue_main_ip}",
-      redisHost    = "${local.worker_queue_main_ip}",
-      n8nVersion   = "${var.n8n_version}"
+      postgresHost   = "${local.worker_queue_main_ip}",
+      redisHost      = "${local.worker_queue_main_ip}",
+      n8nVersion     = "${var.n8n_version}"
+	  n8nConcurrency = "${var.n8n_concurrency}"
     })
   }
 }
