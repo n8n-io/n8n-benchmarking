@@ -516,7 +516,7 @@ data "cloudinit_config" "queue_worker_init" {
       postgresHost   = "${local.worker_queue_main_ip}",
       redisHost      = "${local.worker_queue_main_ip}",
       n8nVersion     = "${var.n8n_version}",
-	  n8nConcurrency = "${var.n8n_concurrency}"
+      n8nConcurrency = "${var.n8n_concurrency}"
     })
   }
 }
