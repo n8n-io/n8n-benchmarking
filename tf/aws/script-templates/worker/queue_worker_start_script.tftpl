@@ -8,6 +8,7 @@ mkdir -p /home/ubuntu/n8n/appdata
 echo "N8N_VERSION=${n8nVersion}" >> /home/ubuntu/n8n/.env
 echo "DB_POSTGRESDB_HOST=${postgresHost}" >> /home/ubuntu/n8n/.env
 echo "QUEUE_BULL_REDIS_HOST=${redisHost}" >> /home/ubuntu/n8n/.env
+echo "N8N_CONCURRENCY=${n8nConcurrency}" >> /home/ubuntu/n8n/.env
 
 sleep 1
 
